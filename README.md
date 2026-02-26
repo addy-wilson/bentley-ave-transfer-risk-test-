@@ -9,7 +9,8 @@ Predicts the likelihood of a D1 women's soccer player transferring to another pr
 │   └── raw/
 │       ├── ncaa_wsoccer_raw_games.csv        # One row per player per game
 │       └── ncaa_wsoccer_transfer_risk.csv    # Aggregated player-season features
-├── ncaa_wsoccer_collector.py                 # Data pipeline script
+├── src/             
+│   └── ncaa_wsoccer_collector.py # Data pipeline script
 ├── requirements.txt
 └── README.md
 ```
@@ -55,4 +56,4 @@ The NCAA API does not include transfer portal data. To train a supervised model,
 - **Division:** D1
 
 ## Disclaimer
-AI was used to help create this README file.
+AI was used to help create this README file and aided in the creation of the Data Pipeline script.
