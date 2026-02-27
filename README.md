@@ -51,7 +51,7 @@ Transfer labels are inferred directly from the data by comparing each player's t
 - `transferred = 1` — player appears the following season but on a different team
 - `left_program = 1` — player does not appear at all the following season (transferred out, graduated, injured, or lost eligibility)
 
-> **Caveat:** `left_program` cannot distinguish between transferring out, graduating, and other reasons for leaving. These labels are a proxy and should be noted as such in any writeup. Ground truth labels can be cross-referenced against [On3](https://www.on3.com/transfer-portal/) or [247Sports](https://247sports.com/transferportal/).
+> **Caveat:** `left_program` cannot distinguish between transferring out, graduating, and other reasons for leaving. These labels are a proxy and should be noted as such in any writeup. Cross-references should be used for explainability.
 
 ## Setup
 
@@ -59,15 +59,6 @@ Transfer labels are inferred directly from the data by comparing each player's t
 pip install -r requirements.txt
 python ncaa_wsoccer_collector.py
 ```
-
-To run a test on a single team, set these variables at the top of the script:
-
-```python
-SEASONS = ["2024"]
-TEAM_FILTER = "arkansas"  # set to None to collect all teams
-```
-
-By default the script collects all D1 teams across seasons `2022`, `2023`, and `2024`. The API is rate-limited to 5 requests/sec — the script stays conservative at ~4.5 req/sec.
 
 ## Data Source
 
