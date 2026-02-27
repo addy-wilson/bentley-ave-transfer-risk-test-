@@ -1,8 +1,10 @@
 """
-ncaa_wsoccer_collector.py
+ncaa_wsoccer_collector_TEST.py
 ═════════════════════════
 Collects NCAA D1 Women's Soccer player stats from the NCAA API
 and outputs a CSV suitable for building a transfer risk model.
+
+(Just using Arkansas 2024)
 
 Strategy:
   1. /schedule        → get all game dates for each season
@@ -30,7 +32,8 @@ DIV     = "d1"
 DELAY   = 0.22   # stay under 5 req/sec
 
 # Seasons to collect. Women's soccer runs Aug–Nov each year.
-SEASONS = ["2024", "2023", "2022"]
+SEASONS = ["2024", "2023", "2022"] 
+TEAM_FILTER = "arkansas"  # set to None to collect all teams
 
 # Months of the women's soccer season
 SEASON_MONTHS = ["08", "09", "10", "11"]
@@ -92,12 +95,19 @@ def get_game_ids_for_date(date_path: str) -> list[tuple[str, dict]]:
     results = []
     for item in data.get("games", []):
         game = item.get("game", {})
-        url  = game.get("url", "")          # e.g. "/game/6348656"
+        url  = game.get("url", "")
         if not url:
             continue
         full_id = url.strip("/").split("/")[-1]
         if not full_id.isdigit():
             continue
+
+        # Team filter
+        if TEAM_FILTER:
+            home_seo = game.get("home", {}).get("names", {}).get("seo", "")
+            away_seo = game.get("away", {}).get("names", {}).get("seo", "")
+            if TEAM_FILTER not in home_seo and TEAM_FILTER not in away_seo:
+                continue
 
         meta = {
             "game_id":      full_id,
@@ -337,14 +347,14 @@ def main():
     raw_df = pd.DataFrame(all_game_rows)
     import os
     os.makedirs("data/raw", exist_ok=True)
-    raw_df.to_csv("data/raw/ncaa_wsoccer_raw_games.csv", index=False)
-    print(f"\n✓ Raw game rows: {raw_df.shape} → saved to ncaa_wsoccer_raw_games.csv")
+    raw_df.to_csv("data/raw/ncaa_wsoccer_raw_games_TEST.csv", index=False)
+    print(f"\n✓ Raw game rows: {raw_df.shape} → saved to ncaa_wsoccer_raw_games_TEST.csv")
 
     # Aggregate to player-season level
     player_df = aggregate_player_season(raw_df.copy())
     player_df = add_transfer_labels(player_df)
-    player_df.to_csv("data/raw/ncaa_wsoccer_transfer_risk.csv", index=False)
-    print(f"✓ Player-season rows: {player_df.shape} → saved to ncaa_wsoccer_transfer_risk.csv")
+    player_df.to_csv("data/raw/ncaa_wsoccer_transfer_risk_TEST.csv", index=False)
+    print(f"✓ Player-season rows: {player_df.shape} → saved to ncaa_wsoccer_transfer_risk_TEST.csv")
 
     print("\nSample (first 5 rows):")
     print(player_df.head().to_string())
