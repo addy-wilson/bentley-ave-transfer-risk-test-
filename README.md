@@ -9,7 +9,8 @@ Predicts the likelihood of a D1 women's soccer player transferring to another pr
 │   └── raw/
 │       ├── ncaa_wsoccer_raw_games.csv        # One row per player per game
 │       └── ncaa_wsoccer_transfer_risk.csv    # Aggregated player-season features
-├── ncaa_wsoccer_collector.py                 # Data pipeline script
+├── src/             
+│   └── ncaa_wsoccer_collector.py # Data pipeline script
 ├── requirements.txt
 └── README.md
 ```
